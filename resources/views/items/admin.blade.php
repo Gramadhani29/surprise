@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Surprise - Admin Panel</title>
+    <title>Admin Panel</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
     <!-- Tailwind CSS CDN -->
@@ -31,6 +31,23 @@
             transform: translateY(-2px);
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
+        
+        .comment-card {
+            transition: all 0.3s ease;
+        }
+        
+        .comment-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        
+        .comment-avatar {
+            transition: all 0.3s ease;
+        }
+        
+        .comment-card:hover .comment-avatar {
+            transform: scale(1.1);
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-blue-50 to-purple-50 min-h-screen">
@@ -42,7 +59,7 @@
             <div class="inline-flex items-center justify-center w-20 h-20 bg-blue-100 rounded-full mb-6">
                 <i class="fas fa-gift text-3xl text-blue-600"></i>
             </div>
-            <h1 class="text-4xl font-bold text-gray-900 mb-4">Surprise Admin Panel</h1>
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">Admin Panel</h1>
             <p class="text-lg text-gray-600">Kelola kode dan foto untuk setiap orang</p>
         </div>
 
@@ -137,6 +154,63 @@
                         </div>
                     @endforeach
                 </div>
+            </div>
+        </div>
+
+        <!-- Comments Section -->
+        <div class="fade-in" style="animation-delay: 0.8s;">
+            <div class="bg-white rounded-2xl shadow-xl p-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">
+                    <i class="fas fa-comments text-green-600 mr-2"></i>
+                    Semua Komentar dari Pengguna
+                </h2>
+                
+                @if(isset($allComments) && count($allComments) > 0)
+                    <div class="space-y-6">
+                        @foreach($allComments as $comment)
+                        <div class="bg-gray-50 rounded-xl p-6 border-l-4 border-green-500 comment-card">
+                            <div class="flex items-start space-x-4">
+                                <div class="flex-shrink-0">
+                                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center comment-avatar">
+                                        <i class="fas fa-comment text-green-600"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <div class="flex items-center space-x-3">
+                                            <h4 class="text-lg font-semibold text-gray-900">{{ $comment->commenter_name }}</h4>
+                                            <span class="text-sm text-gray-500">untuk</span>
+                                            <span class="text-sm font-medium text-blue-600 bg-blue-100 px-2 py-1 rounded">
+                                                {{ $comment->item_name ?? 'Unknown' }}
+                                            </span>
+                                        </div>
+                                        <span class="text-sm text-gray-500">{{ $comment->created_at->format('d M Y H:i') }}</span>
+                                    </div>
+                                    <p class="text-gray-700 leading-relaxed mb-3">{{ $comment->comment_text }}</p>
+                                    <div class="flex items-center space-x-4 text-xs text-gray-500">
+                                        <span>
+                                            <i class="fas fa-code mr-1"></i>
+                                            Kode: {{ $comment->item_code ?? 'Unknown' }}
+                                        </span>
+                                        <span>
+                                            <i class="fas fa-clock mr-1"></i>
+                                            {{ $comment->created_at->diffForHumans() }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="text-center py-8">
+                        <div class="w-16 h-16 bg-gray-100 rounded-full mx-auto mb-4 flex items-center justify-center">
+                            <i class="fas fa-comments text-gray-400 text-2xl"></i>
+                        </div>
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Belum ada komentar</h3>
+                        <p class="text-gray-500">Pengguna belum meninggalkan komentar apapun.</p>
+                    </div>
+                @endif
             </div>
         </div>
     </main>

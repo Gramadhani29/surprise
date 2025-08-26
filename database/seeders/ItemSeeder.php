@@ -74,6 +74,13 @@ class ItemSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'code' => 'Lang',
+                'name' => 'Gilang',
+                'message' => "Lorem ipsum",
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
         
         $this->command->info('Items seeded successfully with all data!');

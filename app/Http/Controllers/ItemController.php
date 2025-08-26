@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Item;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -20,7 +21,8 @@ class ItemController extends Controller
     public function admin(Request $request)
     {
         $items = Item::all();
-        return view('items.admin', compact('items'));
+        $allComments = Comment::orderBy('created_at', 'desc')->get();
+        return view('items.admin', compact('items', 'allComments'));
     }
 
     public function search(Request $request)
@@ -37,7 +39,11 @@ class ItemController extends Controller
         if ($item) {
             // Jika item ditemukan, tampilkan pesan dan data item
             $message = $item->message ?? 'Pesan khusus untukmu!';
-            return view('items.search', compact('message', 'item'));
+            
+            // Fetch comments for this item
+            $comments = Comment::where('item_code', $code)->orderBy('created_at', 'desc')->get();
+            
+            return view('items.search', compact('message', 'item', 'comments'));
         } else {
             // Jika item tidak ditemukan
             return view('items.search');
@@ -67,5 +73,28 @@ class ItemController extends Controller
         }
         
         return redirect()->back()->with('error', 'Gagal mengupload foto');
+    }
+
+    public function addComment(Request $request)
+    {
+        $request->validate([
+            'commenter_name' => 'required|string|max:255',
+            'comment_text' => 'required|string|max:1000',
+            'item_code' => 'required|string',
+            'item_name' => 'required|string'
+        ]);
+
+        try {
+            Comment::create([
+                'commenter_name' => $request->commenter_name,
+                'comment_text' => $request->comment_text,
+                'item_code' => $request->item_code,
+                'item_name' => $request->item_name
+            ]);
+
+            return redirect()->back()->with('comment_success', 'Komentar berhasil ditambahkan!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('comment_error', 'Gagal menambahkan komentar. Silakan coba lagi.');
+        }
     }
 }

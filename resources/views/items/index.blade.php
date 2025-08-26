@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Surprise - Masukkan Kode Anda</title>
+    <title>Batch 6</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
     <!-- Tailwind CSS CDN -->
@@ -124,10 +124,11 @@
                 
                 deleteChar();
             }
+
             
             function typeNewText() {
                 const element = document.getElementById('typewriter-text');
-                const newText = "Terima kasih sudah mau memaafkan aku! 😊";
+                const newText = "Sampai jumpa di kesempatan yang lebih indah.";
                 let i = 0;
                 
                 function type() {
@@ -136,18 +137,72 @@
                         i++;
                         setTimeout(type, 80);
                     } else {
-                        setTimeout(() => restartCycle(), 3000);
+                        setTimeout(() => deleteSecondText(), 3000);
                     }
                 }
                 
                 type();
             }
             
+            function deleteSecondText() {
+                const element = document.getElementById('typewriter-text');
+                let text = element.innerHTML;
+                
+                function deleteChar() {
+                    if (text.length > 0) {
+                        text = text.slice(0, -1);
+                        element.innerHTML = text;
+                        setTimeout(deleteChar, 50);
+                    } else {
+                        setTimeout(() => typeSecondText(), 1000);
+                    }
+                }
+                
+                deleteChar();
+            }
+            
+            function typeSecondText() {
+                const element = document.getElementById('typewriter-text');
+                const secondText = "See u on top guyssss!!!";
+                let i = 0;
+                
+                function type() {
+                    if (i < secondText.length) {
+                        element.innerHTML += secondText.charAt(i);
+                        i++;
+                        setTimeout(type, 80);
+                    } else {
+                        setTimeout(() => deleteThirdText(), 3000);
+                    }
+                }
+                
+                type();
+            }
+            
+            function deleteThirdText() {
+                const element = document.getElementById('typewriter-text');
+                let text = element.innerHTML;
+                
+                function deleteChar() {
+                    if (text.length > 0) {
+                        text = text.slice(0, -1);
+                        element.innerHTML = text;
+                        setTimeout(deleteChar, 50);
+                    } else {
+                        setTimeout(() => restartCycle(), 1000);
+                    }
+                }
+                
+                deleteChar();
+            }
+            
+
+            
             function restartCycle() {
                 const element = document.getElementById('typewriter-text');
                 element.innerHTML = '';
                 setTimeout(() => {
-                    const text = "Hello guys, aku minta maaf ya kalau selama ini banyak salah";
+                    const text = "Perpisahan bukan akhir, tapi awal dari cerita baru.";
                     typeWriter(element, text, 80);
                 }, 500);
             }
@@ -155,7 +210,7 @@
             // Start typewriter effect
             setTimeout(() => {
                 const typewriterElement = document.getElementById('typewriter-text');
-                const text = "Hello guys, aku minta maaf ya kalau selama ini banyak salah";
+                const text = "Perpisahan bukan akhir, tapi awal dari cerita baru.";
                 typeWriter(typewriterElement, text, 80);
             }, 1000);
 
